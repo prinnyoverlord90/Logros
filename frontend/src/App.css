@@ -1,0 +1,179 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(1200px 600px at 10% 10%, #0b1226 0%, rgba(11,18,38,0.7) 20%, rgba(8,10,25,0.9) 60%), linear-gradient(180deg,#071028 0%, #0f1b3a 60%);
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1, h2, h3 {
+  color: #d7b6ff;
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+}
+
+button {
+  background: linear-gradient(45deg, #7c3aed, #a855f7);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #a855f7, #c084fc);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+  transform: translateY(-2px);
+}
+
+input, select {
+  background: #2a2a3e;
+  color: #ffffff;
+  border: 2px solid #4c1d95;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: rgba(42, 42, 62, 0.8);
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #4c1d95;
+  transition: all 0.3s ease;
+}
+
+li:hover {
+  background: rgba(42, 42, 62, 0.9);
+  border-color: #a855f7;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+.card {
+  background: rgba(26, 26, 46, 0.9);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 3px solid rgba(168,85,247,0.18);
+  box-shadow: 0 6px 30px rgba(9, 6, 20, 0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+  margin: 1rem 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nav a {
+  color: #a855f7;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav a:hover, .nav a.active {
+  background: linear-gradient(90deg, rgba(124,58,237,0.18), rgba(168,85,247,0.12));
+  color: #f3e8ff;
+}
+
+/* Leaderboard item style to match stream cards */
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(18,16,32,0.6), rgba(22,18,36,0.6));
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 2px solid rgba(168,85,247,0.12);
+}
+
+/* Chat / announce bubble */
+.chat-bubble {
+  display: inline-block;
+  max-width: 560px;
+  background: linear-gradient(180deg, #0b172b, #0f213b);
+  color: #e6e6ff;
+  padding: 0.8rem 1rem;
+  border-radius: 8px 18px 18px 8px;
+  border: 2px solid rgba(168,85,247,0.14);
+  box-shadow: 0 8px 30px rgba(3,6,20,0.6);
+  position: relative;
+  margin: 0.6rem 0;
+}
+
+.chat-bubble::after {
+  content: '';
+  position: absolute;
+  right: -14px;
+  bottom: 8px;
+  width: 0;
+  height: 0;
+  border-left: 14px solid rgba(15,33,59,1);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+/* Small badge for username/avatar */
+.chat-meta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.sub-goal {
+  width: 420px;
+  height: 18px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.05);
+  overflow: hidden;
+  position: relative;
+  margin: 1rem 0 2rem 0;
+}
+.sub-goal .progress {
+  height: 100%;
+  width: 23%;
+  background: linear-gradient(90deg,#7c3aed,#a855f7);
+  box-shadow: 0 4px 18px rgba(168,85,247,0.35);
+}
+.sub-goal .label {
+  position: absolute;
+  left: 6px;
+  top: -26px;
+  background: #0b0f19;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 2px solid rgba(168,85,247,0.12);
+  color: #e9e1ff;
+  font-weight: 700;
+}
+
+/* small adjustments for list items */
+li {
+  background: transparent;
+  margin: 0.6rem 0;
+  padding: 0;
+}
