@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 interface User {
   id: string;
   username: string;
@@ -25,7 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check if user is already authenticated
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/auth/user', { withCredentials: true });
+        const response = await axios.get('/auth/user', { withCredentials: true });
         console.log('Auth user response:', response.data);
         setUser(response.data);
       } catch (error) {
@@ -38,11 +40,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = () => {
-    window.location.href = 'http://localhost:3000/auth/twitch';
+    window.location.href = `${axios.defaults.baseURL}/auth/twitch`;
   };
 
   const logout = () => {
-    window.location.href = 'http://localhost:3000/auth/logout';
+    window.location.href = `${axios.defaults.baseURL}/auth/logout`;
   };
 
   return (
