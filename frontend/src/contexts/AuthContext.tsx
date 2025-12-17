@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+axios.defaults.baseURL = 'https://logros-backend.onrender.com';
 
 // Add token to requests
 axios.interceptors.request.use((config) => {
