@@ -55,6 +55,17 @@ app.use(helmet());
 app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174', 'https://twitch-logros-frontend.vercel.app'], credentials: true }));
 app.use(express.json());
 const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// Create session table if it doesn't exist
+pgPool.query(`
+  CREATE TABLE IF NOT EXISTS "session" (
+    "sid" varchar NOT NULL COLLATE "default",
+    "sess" json NOT NULL,
+    "expire" timestamp(6) NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session"("expire");
+`).catch(err => console.error('Error creating session table:', err));
+
 app.use(session({ 
   secret: process.env.SESSION_SECRET || 'secret', 
   resave: false, 
