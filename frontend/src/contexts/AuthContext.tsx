@@ -37,6 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     if (token) {
+      console.log('✅ TOKEN DETECTADO EN URL:', token.substring(0, 20) + '...');
       localStorage.setItem('token', token);
       window.history.replaceState({}, document.title, window.location.pathname); // Remove token from URL
     }
