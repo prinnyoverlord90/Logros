@@ -33,15 +33,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for token in URL
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+    
     if (token) {
-      console.log('✅ TOKEN DETECTADO EN URL:', token.substring(0, 20) + '...');
       localStorage.setItem('token', token);
-      window.history.replaceState({}, document.title, window.location.pathname); // Remove token from URL
+      window.history.replaceState({}, '', window.location.pathname);
     }
+  }, []);
 
+  useEffect(() => {
     // Check if user is authenticated
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
