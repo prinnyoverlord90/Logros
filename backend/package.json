@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "build": "chmod +x node_modules/.bin/* && tsc",
+    "build": "tsc",
     "start": "npx prisma db push && node dist/index.js",
     "postinstall": "chmod +x node_modules/.bin/*",
     "test": "jest",
