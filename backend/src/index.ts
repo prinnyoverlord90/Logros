@@ -58,12 +58,12 @@ const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 // Create session table if it doesn't exist
 pgPool.query(`
-  CREATE TABLE IF NOT EXISTS "session" (
-    "sid" varchar NOT NULL COLLATE "default",
+  DROP TABLE IF EXISTS "session";
+  CREATE TABLE "session" (
+    "sid" varchar NOT NULL COLLATE "default" PRIMARY KEY,
     "sess" json NOT NULL,
     "expire" timestamp(6) NOT NULL
   );
-  ALTER TABLE "session" ADD CONSTRAINT IF NOT EXISTS "session_pkey" PRIMARY KEY ("sid");
   CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session"("expire");
 `).catch(err => console.error('Error creating session table:', err));
 
