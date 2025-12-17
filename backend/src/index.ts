@@ -11,6 +11,8 @@ import usersRouter from './routes/users';
 import rewardsRouter from './routes/rewards';
 import leaderboardRouter from './routes/leaderboard';
 import { errorHandler } from './middlewares/errorHandler';
+import { connectTwitchChat } from './services/twitchChatService';
+import { handleTwitchWebhook } from './services/twitchEventSubService';
 import jwt from 'jsonwebtoken';
 
 declare module 'express-session' {

@@ -46,7 +46,7 @@ if (process.env.TWITCH_CLIENT_ID && process.env.TWITCH_CLIENT_SECRET) {
     passport_1.default.use(new passport_twitch_new_1.Strategy({
         clientID: process.env.TWITCH_CLIENT_ID,
         clientSecret: process.env.TWITCH_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/auth/twitch/callback',
+        callbackURL: process.env.CALLBACK_URL || 'http://localhost:3000/auth/twitch/callback',
         scope: ['user:read:email']
     }, async (accessToken, refreshToken, profile, done) => {
         console.log('Twitch profile:', profile);
