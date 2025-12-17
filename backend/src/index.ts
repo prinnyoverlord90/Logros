@@ -72,7 +72,7 @@ app.use(session({
   resave: false, 
   saveUninitialized: false,
   store: new (connectPgSimple(session))({ pool: pgPool }),
-  cookie: { secure: false, httpOnly: true, sameSite: 'lax' }
+  cookie: { secure: true, httpOnly: true, sameSite: 'none' }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
