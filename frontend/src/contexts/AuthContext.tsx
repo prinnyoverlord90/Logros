@@ -69,10 +69,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     window.location.href = '/';
   };
 
-  const logout = () => {
-    window.location.href = `${axios.defaults.baseURL}/auth/logout`;
-  };
-
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
