@@ -63,6 +63,7 @@ pgPool.query(`
     "sess" json NOT NULL,
     "expire" timestamp(6) NOT NULL
   );
+  ALTER TABLE "session" ADD CONSTRAINT IF NOT EXISTS "session_pkey" PRIMARY KEY ("sid");
   CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session"("expire");
 `).catch(err => console.error('Error creating session table:', err));
 
