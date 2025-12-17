@@ -52,7 +52,7 @@ console.log('TWITCH_CLIENT_SECRET:', process.env.TWITCH_CLIENT_SECRET ? '***' : 
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174', 'https://twitch-logros-frontend.vercel.app'], credentials: true }));
 app.use(express.json());
 const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
 app.use(session({ 
@@ -77,10 +77,10 @@ app.use('/leaderboard', leaderboardRouter);
 app.get('/auth/twitch', passport.authenticate('twitch'));
 app.get('/auth/twitch/callback', passport.authenticate('twitch', { failureRedirect: '/' }), (req, res) => {
   console.log('OAuth callback successful for user:', req.user);
-  res.redirect('http://localhost:5173');
+  res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
 });
 app.get('/auth/logout', (req, res) => {
-  req.logout(() => res.redirect('http://localhost:5173'));
+  req.logout(() => res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173'));
 });
 app.get('/auth/user', (req, res) => {
   console.log('Checking auth for user:', req.user);
