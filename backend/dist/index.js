@@ -20,12 +20,16 @@ const twitchChatService_1 = require("./services/twitchChatService");
 const twitchEventSubService_1 = require("./services/twitchEventSubService");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
-// Load .env from project root and override any existing env vars (ensures local .env takes precedence)
+// Load .env from project root but do not override existing env vars (allows Render's DATABASE_URL to take precedence)
 const envPath = path_1.default.join(__dirname, '..', '..', '.env');
 dotenv_1.default.config({ path: envPath });
 try {
     const parsed = dotenv_1.default.parse(fs_1.default.readFileSync(envPath));
-    Object.assign(process.env, parsed);
+    for (const [key, value] of Object.entries(parsed)) {
+        if (!process.env[key]) {
+            process.env[key] = value;
+        }
+    }
 }
 catch (e) {
     // if file missing or unreadable, continue — dotenv already attempted to load

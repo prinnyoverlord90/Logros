@@ -33,12 +33,16 @@ declare global {
 
 import path from 'path';
 import fs from 'fs';
-// Load .env from project root and override any existing env vars (ensures local .env takes precedence)
+// Load .env from project root but do not override existing env vars (allows Render's DATABASE_URL to take precedence)
 const envPath = path.join(__dirname, '..', '..', '.env');
 dotenv.config({ path: envPath });
 try {
   const parsed = dotenv.parse(fs.readFileSync(envPath));
-  Object.assign(process.env, parsed);
+  for (const [key, value] of Object.entries(parsed)) {
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
 } catch (e) {
   // if file missing or unreadable, continue — dotenv already attempted to load
 }
