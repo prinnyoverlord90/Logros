@@ -11,8 +11,7 @@ import usersRouter from './routes/users';
 import rewardsRouter from './routes/rewards';
 import leaderboardRouter from './routes/leaderboard';
 import { errorHandler } from './middlewares/errorHandler';
-import { connectTwitchChat } from './services/twitchChatService';
-import { handleTwitchWebhook } from './services/twitchEventSubService';
+import jwt from 'jsonwebtoken';
 
 declare module 'express-session' {
   interface SessionData {
@@ -89,17 +88,23 @@ app.use('/leaderboard', leaderboardRouter);
 app.get('/auth/twitch', passport.authenticate('twitch'));
 app.get('/auth/twitch/callback', passport.authenticate('twitch', { failureRedirect: '/' }), (req, res) => {
   console.log('OAuth callback successful for user:', req.user);
-  res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
+  const token = jwt.sign({ user: req.user }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}?token=${token}`);
 });
 app.get('/auth/logout', (req, res) => {
   req.logout(() => res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173'));
 });
 app.get('/auth/user', (req, res) => {
-  console.log('Checking auth for user:', req.user);
-  if (req.user) {
-    res.json(req.user);
+  const token = req.headers.authorization?.split(' ')[1];
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as any;
+      res.json(decoded.user);
+    } catch (err) {
+      res.status(401).json({ error: 'Invalid token' });
+    }
   } else {
-    res.status(401).json({ error: 'Not authenticated' });
+    res.status(401).json({ error: 'No token' });
   }
 });
 
