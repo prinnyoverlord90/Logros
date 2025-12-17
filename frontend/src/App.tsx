@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Leaderboard from './pages/Leaderboard';
 import Achievements from './pages/Achievements';
 import Rewards from './pages/Rewards';
