@@ -24,12 +24,12 @@ const Achievements = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/achievements').then(res => setAchievements(res.data));
+    axios.get('/achievements').then(res => setAchievements(res.data));
   }, []);
 
   useEffect(() => {
     if (user) {
-      axios.get(`http://localhost:3000/users/${user.id}`).then(res => setUserAchievements(res.data.achievements));
+      axios.get(`/users/${user.id}`).then(res => setUserAchievements(res.data.achievements));
     }
   }, [user]);
 

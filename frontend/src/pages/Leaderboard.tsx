@@ -12,7 +12,7 @@ const Leaderboard = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/leaderboard').then(res => setUsers(res.data));
+    axios.get('/leaderboard').then(res => setUsers(res.data));
   }, []);
 
   return (

@@ -14,7 +14,7 @@ const Rewards = () => {
   const [rewards, setRewards] = useState<Reward[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/rewards').then(res => setRewards(res.data));
+    axios.get('/rewards').then(res => setRewards(res.data));
   }, []);
 
   const redeem = (rewardId: string) => {
@@ -22,7 +22,7 @@ const Rewards = () => {
       alert('Debes iniciar sesión primero');
       return;
     }
-    axios.post(`http://localhost:3000/users/${user.id}/redeem`, { rewardId })
+    axios.post(`/users/${user.id}/redeem`, { rewardId })
       .then(() => alert('¡Reward canjeada!'))
       .catch(err => {
         const error = err.response?.data?.error;

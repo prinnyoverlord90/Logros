@@ -3,8 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import session from 'express-session';
-import SQLiteStoreFactory from 'connect-sqlite3';
-const SQLiteStore = SQLiteStoreFactory(session);
+import connectPgSimple from 'connect-pg-simple';
+import { Pool } from 'pg';
 import passport from 'passport';
 import achievementsRouter from './routes/achievements';
 import usersRouter from './routes/users';
@@ -50,11 +50,12 @@ const app = express();
 app.use(helmet());
 app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174'], credentials: true }));
 app.use(express.json());
+const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
 app.use(session({ 
   secret: process.env.SESSION_SECRET || 'secret', 
   resave: false, 
   saveUninitialized: false,
-  store: new SQLiteStore({ db: 'sessions.db', dir: '.' }) as any,
+  store: new (connectPgSimple(session))({ pool: pgPool }),
   cookie: { secure: false, httpOnly: true, sameSite: 'lax' }
 }));
 app.use(passport.initialize());
