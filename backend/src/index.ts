@@ -52,7 +52,7 @@ console.log('TWITCH_CLIENT_SECRET:', process.env.TWITCH_CLIENT_SECRET ? '***' : 
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174', 'https://twitch-logros-frontend.vercel.app'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174', 'https://logrosvicky-f0agentn5-prinnyoverlord90s-projects.vercel.app'], credentials: true }));
 app.use(express.json());
 const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
 
