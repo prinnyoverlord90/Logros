@@ -36,6 +36,7 @@ function AppContent() {
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/rewards" element={<Rewards />} />
         {isStreamer && <Route path="/admin" element={<Admin />} />}
+        <Route path="*" element={<div>Página no encontrada</div>} />
       </Routes>
     </div>
   );
