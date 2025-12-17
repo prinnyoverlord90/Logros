@@ -8,7 +8,7 @@ interface User {
   username: string;
   twitchId: string;
   currentPoints: number;
-}A
+}
 
 interface AuthContextType {
   user: User | null;

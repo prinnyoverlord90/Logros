@@ -49,7 +49,7 @@ const Admin = () => {
     if (selectedUser && selectedAchievement) {
       axios.post(`/users/${selectedUser.id}/achievements/${selectedAchievement}`)
         .then(() => alert('Logro otorgado'))
-        .catch(err => alert('Error'));
+        .catch(() => alert('Error'));
     }
   };
 
@@ -60,7 +60,7 @@ const Admin = () => {
           alert('Usuario eliminado');
           loadLeaderboard();
         })
-        .catch(err => alert('Error al eliminar usuario'));
+        .catch(() => alert('Error al eliminar usuario'));
     }
   };
 
