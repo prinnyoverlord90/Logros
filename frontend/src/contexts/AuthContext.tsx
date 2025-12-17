@@ -33,10 +33,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    console.log('🔍 URL SEARCH:', window.location.search); // DEBUG
     
+    const token = new URLSearchParams(window.location.search).get('token');
     if (token) {
+      console.log('💾 TOKEN DETECTADO, guardando...');
       localStorage.setItem('token', token);
       window.history.replaceState({}, '', window.location.pathname);
     }
