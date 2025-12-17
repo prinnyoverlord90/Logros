@@ -1,9 +1,23 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
+    {
+      "source": "/achievements",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/logros",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/rewards",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ranking",
+      "destination": "/index.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
