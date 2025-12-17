@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Leaderboard from './pages/Leaderboard';
 import Achievements from './pages/Achievements';
 import Rewards from './pages/Rewards';
@@ -25,10 +25,10 @@ function AppContent() {
         <button onClick={login}>Iniciar sesión con Twitch</button>
       )}
       <nav className="nav">
-        <a href="/leaderboard">Clasificación</a>
-        <a href="/achievements">Logros</a>
-        <a href="/rewards">Recompensas</a>
-        {isStreamer && <a href="/admin">Administración</a>}
+        <Link to="/leaderboard">Clasificación</Link>
+        <Link to="/achievements">Logros</Link>
+        <Link to="/rewards">Recompensas</Link>
+        {isStreamer && <Link to="/admin">Administración</Link>}
       </nav>
       <Routes>
         <Route path="/" element={<Leaderboard />} />
