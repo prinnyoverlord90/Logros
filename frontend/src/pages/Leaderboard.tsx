@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 interface User {
   id: string;
@@ -12,7 +12,7 @@ const Leaderboard = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    axios.get('/leaderboard').then(res => setUsers(res.data));
+    api.get('/leaderboard').then(res => setUsers(res.data));
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 
 interface Reward {
@@ -14,7 +14,7 @@ const Rewards = () => {
   const [rewards, setRewards] = useState<Reward[]>([]);
 
   useEffect(() => {
-    axios.get('/rewards').then(res => setRewards(res.data));
+    api.get('/rewards').then(res => setRewards(res.data));
   }, []);
 
   const redeem = (rewardId: string) => {
@@ -22,7 +22,7 @@ const Rewards = () => {
       alert('Debes iniciar sesión primero');
       return;
     }
-    axios.post(`/users/${user.id}/redeem`, { rewardId })
+    api.post(`/users/${user.id}/redeem`, { rewardId })
       .then(() => alert('¡Reward canjeada!'))
       .catch(err => {
         const error = err.response?.data?.error;

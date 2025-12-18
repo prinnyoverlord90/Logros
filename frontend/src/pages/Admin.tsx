@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 interface User {
   id: string;
@@ -29,25 +29,25 @@ const Admin = () => {
   const [selectedAchievement, setSelectedAchievement] = useState('');
 
   useEffect(() => {
-    axios.get('/achievements').then(res => setAchievements(res.data));
+    api.get('/achievements').then(res => setAchievements(res.data));
     loadLeaderboard();
   }, []);
 
   const loadLeaderboard = () => {
-    axios.get('/leaderboard?limit=100').then(res => setLeaderboardUsers(res.data));
+    api.get('/leaderboard?limit=100').then(res => setLeaderboardUsers(res.data));
   };
 
   const searchUsers = () => {
-    axios.get(`/users?username=${query}`).then(res => setUsers(res.data));
+    api.get(`/users?username=${query}`).then(res => setUsers(res.data));
   };
 
   const selectUser = (user: User) => {
-    axios.get(`/users/${user.id}`).then(res => setSelectedUser(res.data));
+    api.get(`/users/${user.id}`).then(res => setSelectedUser(res.data));
   };
 
   const award = () => {
     if (selectedUser && selectedAchievement) {
-      axios.post(`/users/${selectedUser.id}/achievements/${selectedAchievement}`)
+      api.post(`/users/${selectedUser.id}/achievements/${selectedAchievement}`)
         .then(() => alert('Logro otorgado'))
         .catch(() => alert('Error'));
     }
@@ -55,7 +55,7 @@ const Admin = () => {
 
   const deleteUser = (userId: string, username: string) => {
     if (confirm(`¿Estás seguro de que quieres eliminar al usuario ${username}?`)) {
-      axios.delete(`/users/${userId}`)
+      api.delete(`/users/${userId}`)
         .then(() => {
           alert('Usuario eliminado');
           loadLeaderboard();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 
 interface Achievement {
@@ -24,12 +24,12 @@ const Achievements = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    axios.get('/achievements').then(res => setAchievements(res.data));
+    api.get('/achievements').then(res => setAchievements(res.data));
   }, []);
 
   useEffect(() => {
     if (user) {
-      axios.get(`/users/${user.id}`).then(res => setUserAchievements(res.data.achievements));
+      api.get(`/users/${user.id}`).then(res => setUserAchievements(res.data.achievements));
     }
   }, [user]);
 

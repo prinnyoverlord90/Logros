@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../api';
 
 interface User {
   id: string;
@@ -32,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       console.log("🚀 Enviando validación al backend...");
-      const response = await axios.get('https://logros-backend.onrender.com/auth/user', {
+      const response = await api.get('/auth/user', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -83,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = () => {
-    window.location.href = 'https://logros-backend.onrender.com/auth/twitch';
+    window.location.href = `${api.defaults.baseURL}/auth/twitch`;
   };
 
   const logout = () => {
