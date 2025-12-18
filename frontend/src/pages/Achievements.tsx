@@ -29,7 +29,7 @@ const Achievements = () => {
 
   useEffect(() => {
     if (user) {
-      api.get(`/users/${user.id}`).then(res => setUserAchievements(res.data.achievements));
+      api.get(`/users/${user.id}`).then(res => setUserAchievements(res.data.achievements.filter((ua: UserAchievement) => ua.achievement)));
     }
   }, [user]);
 

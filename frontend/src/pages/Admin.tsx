@@ -5,7 +5,19 @@ interface User {
   id: string;
   username: string;
   currentPoints: number;
-  achievements: { id: string; name: string; description: string; points: number; category: string; count: number }[];
+  achievements: {
+    id: string;
+    achievement: {
+      id: string;
+      name: string;
+      description: string;
+      points: number;
+      category: string;
+      isRepeatable: boolean;
+    };
+    count: number;
+    awardedAt: string;
+  }[];
 }
 
 interface Achievement {
