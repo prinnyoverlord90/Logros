@@ -102,8 +102,8 @@ const Admin = () => {
           <p>Usuario seleccionado: {selectedUser.username} ({selectedUser.currentPoints} puntos)</p>
           <h3>Logros:</h3>
           <ul>
-            {selectedUser.achievements.map(a => (
-              <li key={a.id}>{a.name}: {a.description} ({a.points} puntos) - Desbloqueado {a.count} vez(a)</li>
+            {selectedUser.achievements.filter(a => a.achievement).map(a => (
+              <li key={a.id}>{a.achievement.name}: {a.achievement.description} ({a.achievement.points} puntos) - Desbloqueado {a.count} vez(a)</li>
             ))}
           </ul>
           <select onChange={e => setSelectedAchievement(e.target.value)}>
