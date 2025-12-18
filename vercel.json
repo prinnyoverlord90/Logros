@@ -1,6 +1,8 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/leaderboard",
@@ -15,7 +17,11 @@
       "destination": "/index.html"
     },
     {
-      "source": "/rewards",
+      "source": "/recompensas",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/clasificacion",
       "destination": "/index.html"
     },
     {
