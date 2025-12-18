@@ -1,16 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
-axios.defaults.baseURL = 'https://logros-backend.onrender.com';
-
-// Add token to requests
-axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 interface User {
   id: string;
@@ -21,9 +10,9 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   login: () => void;
   logout: () => void;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,31 +21,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const checkAuth = async (passedToken?: string) => {
-    const token = passedToken || localStorage.getItem('token');
-
+  // 1. Función para verificar el token con el servidor
+  const checkAuth = async (tokenToUse?: string) => {
+    const token = tokenToUse || localStorage.getItem('token');
+    
     if (!token) {
       setLoading(false);
       return;
     }
 
     try {
-      console.log("🚀 Enviando petición a /auth/user con token:", token.substring(0, 10) + "...");
-      
+      console.log("🚀 Enviando validación al backend...");
       const response = await axios.get('https://logros-backend.onrender.com/auth/user', {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       });
 
+      // Validamos que la estructura sea response.data.user
       if (response.data && response.data.user) {
-        console.log("✅ Usuario validado:", response.data.user.username);
+        console.log("✅ Usuario recuperado:", response.data.user.username);
         setUser(response.data.user);
       }
     } catch (error) {
-      console.error("❌ Error en la validación:", error);
-      // Solo limpiamos si el error es de autenticación
+      console.error("❌ Error en checkAuth:", error);
+      // Solo limpiamos si el error es de token inválido (401)
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         localStorage.removeItem('token');
         setUser(null);
@@ -66,22 +55,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // 2. Efecto de inicialización único
   useEffect(() => {
-    const initializeAuth = async () => {
+    const init = async () => {
+      console.log("Checking URL for tokens...");
       const params = new URLSearchParams(window.location.search);
       const tokenFromUrl = params.get('token');
 
       if (tokenFromUrl) {
-        console.log("📍 Token detectado en URL, guardando...");
+        console.log("📍 Token encontrado en URL, guardando y validando...");
         localStorage.setItem('token', tokenFromUrl);
-        
-        // Limpiamos la URL inmediatamente
+        // Limpiamos la URL sin recargar la página
         window.history.replaceState({}, document.title, window.location.pathname);
-        
-        // Forzamos que checkAuth use el token que acabamos de recibir
+        // IMPORTANTE: Pasamos el token directamente para evitar retrasos de localStorage
         await checkAuth(tokenFromUrl);
       } else {
-        // Si no hay token en la URL, buscamos el de siempre
         const savedToken = localStorage.getItem('token');
         if (savedToken) {
           await checkAuth(savedToken);
@@ -91,11 +79,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
-    initializeAuth();
+    init();
   }, []);
 
   const login = () => {
-    window.location.href = `${axios.defaults.baseURL}/auth/twitch`;
+    window.location.href = 'https://logros-backend.onrender.com/auth/twitch';
   };
 
   const logout = () => {
@@ -105,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -113,6 +101,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
   return context;
 };

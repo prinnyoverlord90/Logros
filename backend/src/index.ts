@@ -111,7 +111,7 @@ app.get('/auth/user', (req, res) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as any;
-      res.json(decoded.user);
+      res.json({ user: decoded.user });
     } catch (err) {
       res.status(401).json({ error: 'Invalid token' });
     }
