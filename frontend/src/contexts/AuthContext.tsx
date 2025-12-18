@@ -32,6 +32,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const checkAuth = async () => {
+    const storedToken = localStorage.getItem('token');
+    console.log('🔍 CHECK AUTH - Token in localStorage:', storedToken ? 'YES' : 'NO');
+    if (storedToken) {
+      console.log('📡 Calling /auth/user...');
+      try {
+        const response = await axios.get('/auth/user');
+        console.log('✅ Auth user response:', response.data);
+        setUser(response.data);
+      } catch (error) {
+        console.log('❌ Auth check failed:', error);
+        localStorage.removeItem('token');
+      }
+    } else {
+      console.log('🚫 No token in localStorage');
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     console.log('🔍 URL SEARCH:', window.location.search); // DEBUG
     
@@ -40,30 +59,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('💾 TOKEN DETECTADO, guardando...');
       localStorage.setItem('token', token);
       window.history.replaceState({}, '', window.location.pathname);
+      checkAuth();
+    } else {
+      checkAuth();
     }
-  }, []);
-
-  useEffect(() => {
-    // Check if user is authenticated
-    const checkAuth = async () => {
-      const storedToken = localStorage.getItem('token');
-      console.log('🔍 CHECK AUTH - Token in localStorage:', storedToken ? 'YES' : 'NO');
-      if (storedToken) {
-        console.log('📡 Calling /auth/user...');
-        try {
-          const response = await axios.get('/auth/user');
-          console.log('✅ Auth user response:', response.data);
-          setUser(response.data);
-        } catch (error) {
-          console.log('❌ Auth check failed:', error);
-          localStorage.removeItem('token');
-        }
-      } else {
-        console.log('🚫 No token in localStorage');
-      }
-      setLoading(false);
-    };
-    checkAuth();
   }, []);
 
   const login = () => {
