@@ -33,24 +33,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   const checkAuth = async () => {
-    const storedToken = localStorage.getItem('token');
-    console.log('🔍 CHECK AUTH - Token in localStorage:', storedToken ? 'YES' : 'NO');
-    if (storedToken) {
-      console.log('📡 Calling /auth/user...');
-      try {
-        const response = await axios.get('/auth/user', {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
-        console.log('✅ Auth user response:', response.data);
-        setUser(response.data.user);
-      } catch (error) {
-        console.log('❌ Auth check failed:', error);
-        localStorage.removeItem('token');
-      }
-    } else {
-      console.log('🚫 No token in localStorage');
+    const token = localStorage.getItem('token');
+    
+    // LOG DE CONTROL: Mira la consola del navegador, si sale "null", no estamos guardando bien el token
+    console.log("🔍 Intentando checkAuth con token:", token);
+
+    if (!token) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    try {
+      const response = await axios.get('https://logros-backend.onrender.com/auth/user', {
+        headers: {
+          // Asegúrate de que Authorization esté escrito exactamente así
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log("✅ Usuario recibido:", response.data);
+
+      if (response.data && response.data.user) {
+        setUser(response.data.user);
+      }
+    } catch (error) {
+      console.error("❌ Auth check failed:", error);
+      // Solo borramos el token si el error es realmente de credenciales (401 o 403)
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        localStorage.removeItem('token');
+        setUser(null);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
