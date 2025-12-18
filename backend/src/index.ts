@@ -53,17 +53,33 @@ console.log('TWITCH_CLIENT_SECRET:', process.env.TWITCH_CLIENT_SECRET ? '***' : 
 const app = express();
 
 app.use(helmet());
-app.use(cors({ 
-  origin: (origin, callback) => {
-    if (!origin || /^https:\/\/logrosvicky-.*\.vercel\.app$/.test(origin)) {
+// Definimos los orígenes permitidos
+const allowedOrigins = [
+  'https://logrosvicky.vercel.app',
+  'http://localhost:5173', // Para tus pruebas locales
+  'http://localhost:3000'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir peticiones sin origen (como aplicaciones móviles o curl) 
+    // y comprobar si el origen está en la lista blanca
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log("Origen bloqueado por CORS:", origin); // Esto te dirá exactamente qué URL falla
       callback(new Error('Not allowed by CORS'));
     }
   },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+// Asegúrate de que esto esté antes de cualquier ruta
+app.options('*', cors(corsOptions));
 app.use(express.json());
 const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
 
