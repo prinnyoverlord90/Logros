@@ -1,33 +1,5 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/leaderboard",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/achievements",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/logros",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/recompensas",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/clasificacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/ranking",
-      "destination": "/index.html"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
