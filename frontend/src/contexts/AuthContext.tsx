@@ -47,15 +47,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check if user is authenticated
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
+      console.log('🔍 CHECK AUTH - Token in localStorage:', storedToken ? 'YES' : 'NO');
       if (storedToken) {
+        console.log('📡 Calling /auth/user...');
         try {
           const response = await axios.get('/auth/user');
-          console.log('Auth user response:', response.data);
+          console.log('✅ Auth user response:', response.data);
           setUser(response.data);
         } catch (error) {
-          console.log('Auth check failed:', error);
+          console.log('❌ Auth check failed:', error);
           localStorage.removeItem('token');
         }
+      } else {
+        console.log('🚫 No token in localStorage');
       }
       setLoading(false);
     };
