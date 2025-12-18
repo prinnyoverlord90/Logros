@@ -38,9 +38,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (storedToken) {
       console.log('📡 Calling /auth/user...');
       try {
-        const response = await axios.get('/auth/user');
+        const response = await axios.get('/auth/user', {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        });
         console.log('✅ Auth user response:', response.data);
-        setUser(response.data);
+        setUser(response.data.user);
       } catch (error) {
         console.log('❌ Auth check failed:', error);
         localStorage.removeItem('token');
