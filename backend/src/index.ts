@@ -61,7 +61,8 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true 
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });

@@ -32,11 +32,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    
-    // LOG DE CONTROL: Mira la consola del navegador, si sale "null", no estamos guardando bien el token
-    console.log("🔍 Intentando checkAuth con token:", token);
+  const checkAuth = async (passedToken?: string) => {
+    const token = passedToken || localStorage.getItem('token');
 
     if (!token) {
       setLoading(false);
@@ -44,21 +41,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
+      console.log("🚀 Enviando petición a /auth/user con token:", token.substring(0, 10) + "...");
+      
       const response = await axios.get('https://logros-backend.onrender.com/auth/user', {
         headers: {
-          // Asegúrate de que Authorization esté escrito exactamente así
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
         }
       });
 
-      console.log("✅ Usuario recibido:", response.data);
-
       if (response.data && response.data.user) {
+        console.log("✅ Usuario validado:", response.data.user.username);
         setUser(response.data.user);
       }
     } catch (error) {
-      console.error("❌ Auth check failed:", error);
-      // Solo borramos el token si el error es realmente de credenciales (401 o 403)
+      console.error("❌ Error en la validación:", error);
+      // Solo limpiamos si el error es de autenticación
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         localStorage.removeItem('token');
         setUser(null);
@@ -69,17 +67,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    console.log('🔍 URL SEARCH:', window.location.search); // DEBUG
-    
-    const token = new URLSearchParams(window.location.search).get('token');
-    if (token) {
-      console.log('💾 TOKEN DETECTADO, guardando...');
-      localStorage.setItem('token', token);
-      window.history.replaceState({}, '', window.location.pathname);
-      checkAuth();
-    } else {
-      checkAuth();
-    }
+    const initializeAuth = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const tokenFromUrl = params.get('token');
+
+      if (tokenFromUrl) {
+        console.log("📍 Token detectado en URL, guardando...");
+        localStorage.setItem('token', tokenFromUrl);
+        
+        // Limpiamos la URL inmediatamente
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Forzamos que checkAuth use el token que acabamos de recibir
+        await checkAuth(tokenFromUrl);
+      } else {
+        // Si no hay token en la URL, buscamos el de siempre
+        const savedToken = localStorage.getItem('token');
+        if (savedToken) {
+          await checkAuth(savedToken);
+        } else {
+          setLoading(false);
+        }
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   const login = () => {
