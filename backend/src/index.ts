@@ -60,11 +60,11 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
+const corsOptions: cors.CorsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     // Permitir peticiones sin origen (como aplicaciones móviles o curl) 
     // y comprobar si el origen está en la lista blanca
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.log("Origen bloqueado por CORS:", origin); // Esto te dirá exactamente qué URL falla
